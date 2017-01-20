@@ -43,13 +43,17 @@
     return 1.337 * wizardWidth;
   };
   function getWizardX(width) {
-    if (typeof (width) === 'number') {
+    if (isFinite(width)) {
       return width / 2 - wizardWidth / 2;
+    } else {
+      throw new TypeError('Значение свойства "width" должно быть "finite number"');
     }
   }
   function getWizardY(height) {
-    if (typeof (height) === 'number') {
+    if (isFinite(height)) {
       return height * 2 / 3;
+    } else {
+      throw new TypeError('Значение свойства "height" должно быть "finite number"');
     }
   }
 </script>
