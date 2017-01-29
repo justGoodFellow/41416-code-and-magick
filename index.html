@@ -35,7 +35,7 @@
 <script>
   var fireballSize = 22;
   var getFireballSpeed = function (left) {
-    return left ? 5 : 2
+    return left ? 5 : 2;
   };
   var wizardSpeed = 3;
   var wizardWidth = 70;
@@ -43,20 +43,21 @@
     return 1.337 * wizardWidth;
   };
   function getWizardX(width) {
-    if (isFinite(width) && !isNaN(width) {
+    if (isFinite(width) && !isNaN(width)) {
       return width / 2 - wizardWidth / 2;
     } else {
       throw new TypeError('Значение свойства "width" должно быть "finite number"');
     }
   }
   function getWizardY(height) {
-    if (isFinite(height) && !isNaN(height) {
+    if (isFinite(height) && !isNaN(height)) {
       return height * 2 / 3;
     } else {
       throw new TypeError('Значение свойства "height" должно быть "finite number"');
     }
   }
 </script>
+<script src="js/stat.js"></script>
 <script src="js/game.js" type="application/javascript"></script>
 
 </body>
