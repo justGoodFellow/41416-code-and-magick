@@ -33,13 +33,11 @@ var getMax = function (array) {
 };
 
 var getRandomColorBar = function () {
-  return [
-    'rgba(0, 0,' +
+  return 'rgba(0, 0,' +
     ((Math.random() * 5) * 50).toFixed(0) +
     ',' +
     (Math.random()).toFixed(1) +
-    ')'
-  ];
+    ')';
 };
 
 window.renderStatistics = function (ctx, names, times) {
