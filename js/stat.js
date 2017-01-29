@@ -1,56 +1,82 @@
 'use strict';
 
-var drawCloud = function (ctx, x, y, width, height) {
-  ctx.fillRect(x, y, width, height);
-};
+var defaultTextColor = '#000';
+var defaultFont = '16px PT Mono';
+var cloudWidth = 420;
+var cloudHeight = 270;
 
-window.renderStatistics = function (ctx, names, times) {
+var drawCloud = function (ctx, x, y) {
+  var offset = 10;
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  drawCloud(ctx, 110, 20, 420, 270);
+  ctx.fillRect(x + offset, y + offset, cloudWidth, cloudHeight);
 
   ctx.fillStyle = 'rgb(255, 255, 255)';
-  drawCloud(ctx, 100, 10, 420, 270);
+  ctx.fillRect(x, y, cloudWidth, cloudHeight);
+};
 
-  ctx.fillStyle = '#000';
-  ctx.font = '14px PT Mono';
-  ctx.fillText('Ура вы победили!', 120, 40);
-  ctx.fillText('Список результатов:', 120, 60);
+var drawText = function (ctx, text, x, y, color, font) {
+  ctx.fillStyle = color || defaultTextColor;
+  ctx.font = font || defaultFont;
+  ctx.fillText(text, x, y);
+};
 
+var getMax = function (array) {
   var max = -1;
-  var min;
 
-  for (var i = 0; i < times.length; i++) {
-    if (times[i] > max) {
-      max = times[i];
-    }
-    if (times[i] < min) {
-      min = times[i];
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] > max) {
+      max = array[i];
     }
   }
 
-  min = 0;
+  return max;
+};
 
-  var histoHeight = 150;
-  var histoX = 140;
-  var step = histoHeight / (max - min);
+var getRandomColorBar = function () {
+  return [
+    'rgba(0, 0,',
+    ((Math.random() * 5) * 50).toFixed(0),
+    ',',
+    (Math.random()).toFixed(1),
+    ')'
+  ].join('');
+};
+
+window.renderStatistics = function (ctx, names, times) {
+  var positionX = 100;
+  var positionY = 10;
+
+  drawCloud(ctx, positionX, positionY);
+  drawText(ctx, 'Ура вы победили!', positionX + 20, positionY + 30);
+  drawText(ctx, 'Список результатов:', positionX + 20, positionY + 50);
+
+  var max = getMax(times);
+
+  var histogramHeight = 150;
+  var histogramX = 140;
+  var step = histogramHeight / max;
   var columnIndent = 90;
 
-  for (i = 0; i < times.length; i++) {
+  for (var i = 0; i < times.length; i++) {
     var name = names[i];
     var time = times[i];
-    var height = step * (time - min);
+    var height = step * time;
+    var barPositionX = histogramX + columnIndent * i;
 
-    ctx.fillText(time.toFixed(0), histoX + columnIndent * i, 90 + histoHeight - height);
+    var topTextPositionY = 90 + histogramHeight - height;
+    var barTextPositionY = 100 + histogramHeight - height;
+    var bottomTextPositionY = 100 + histogramHeight + 20;
 
-    if (name === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      ctx.fillStyle = ['rgba(0, 0,', ((Math.random() * 5) * 50).toFixed(0), ',', (Math.random()).toFixed(1), ')'].join('');
-    }
+    // Рисуем имя игрока
+    drawText(ctx, time.toFixed(0), barPositionX, topTextPositionY);
 
-    ctx.fillRect(histoX + columnIndent * i, 100 + histoHeight - height, 40, height);
+    // Рисуем бар
+    ctx.fillStyle = (name === 'Вы')
+      ? 'rgba(255, 0, 0, 1)'
+      : getRandomColorBar();
+    ctx.fillRect(barPositionX, barTextPositionY, 40, height);
 
-    ctx.fillStyle = '#000';
-    ctx.fillText(name, histoX + columnIndent * i, 100 + histoHeight + 20);
+    // Рисуем кол-во очков игрока
+    drawText(ctx, name, barPositionX, bottomTextPositionY);
   }
 };
