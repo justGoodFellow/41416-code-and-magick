@@ -14,9 +14,9 @@ var drawCloud = function (ctx, x, y) {
   ctx.fillRect(x, y, cloudWidth, cloudHeight);
 };
 
-var drawText = function (ctx, text, x, y, color, font) {
-  ctx.fillStyle = color || defaultTextColor;
-  ctx.font = font || defaultFont;
+var drawText = function (ctx, text, x, y) {
+  ctx.fillStyle = defaultTextColor;
+  ctx.font = defaultFont;
   ctx.fillText(text, x, y);
 };
 
@@ -34,12 +34,12 @@ var getMax = function (array) {
 
 var getRandomColorBar = function () {
   return [
-    'rgba(0, 0,',
-    ((Math.random() * 5) * 50).toFixed(0),
-    ',',
-    (Math.random()).toFixed(1),
+    'rgba(0, 0,' +
+    ((Math.random() * 5) * 50).toFixed(0) +
+    ',' +
+    (Math.random()).toFixed(1) +
     ')'
-  ].join('');
+  ];
 };
 
 window.renderStatistics = function (ctx, names, times) {
